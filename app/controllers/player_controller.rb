@@ -24,7 +24,7 @@ class PlayerController < ApplicationController
     # whitelist params
     params.permit(:name)
   end
-    def set_player
+  def set_player
     @player = Player.find(params[:id])
   end
 end
