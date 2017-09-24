@@ -11,11 +11,18 @@ class PlayerController < ApplicationController
   end
 
   def update
+    @player.update(player_params)
+    json_response(@player, :updated)
   end
 
   def delete
     @player.destroy!
-    head :no_content
+    json_response(head, :no_content)
+  end
+
+  def index
+    @players = Player.all
+    json_response(@players)
   end
 
   private

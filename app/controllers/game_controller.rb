@@ -1,19 +1,28 @@
 class GameController < ApplicationController
   before_action :set_game, only: [:show, :update, :destroy]
 
+  def index
+    @games = Game.all
+    json_response(@games)
+  end
+
   def create
     @game = Game.create!(game_params)
     json_response(@game, :created)
   end
 
   def show
-    json_response(@game)
+    json_response(GameSerializer.new(@game))
   end
 
   def update
+    @game.update(game_params)
+    json_response(@game :updated)
   end
 
-  def delete
+  def destroy
+    @game.delete
+    json_response(head, :no_content)
   end
 
   private
@@ -22,7 +31,7 @@ class GameController < ApplicationController
     # whitelist params
     params.permit(:player_1_id, :player_2_id, :finished)
   end
-    def set_game
+  def set_game
     @game = Game.find(params[:id])
   end
 end
