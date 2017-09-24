@@ -1,5 +1,5 @@
 class GameController < ApplicationController
-  before_action :set_game, only: [:show, :update, :rewind, :destroy]
+  before_action :set_game, only: [:show, :update, :destroy]
 
   def index
     @games = Game.all
@@ -23,11 +23,6 @@ class GameController < ApplicationController
   def destroy
     @game.delete
     json_response(head, :no_content)
-  end
-
-  def rewind
-    @game.rewind!
-    json_response(@game, :updated)
   end
 
   private

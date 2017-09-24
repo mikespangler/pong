@@ -1,5 +1,5 @@
 class PlayerController < ApplicationController
-  before_action :set_player, only: [:show, :update, :delete]
+  before_action :set_player, only: [:show, :update, :destroy]
 
   def create
     @player = Player.create!(player_params)
@@ -15,7 +15,7 @@ class PlayerController < ApplicationController
     json_response(@player, :updated)
   end
 
-  def delete
+  def destroy
     @player.destroy!
     json_response(head, :no_content)
   end
