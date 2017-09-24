@@ -11,15 +11,16 @@ class Player < ApplicationRecord
     end
 
     def win_percentage
-        if games_played > 0
-            (self.games.where(:winner => self.id).count / games_played) * 100
-        else
-            0
-        end
+        games_played > 0 ? (self.games.where(:winner => self.id).count.to_f / games_played.to_f) * 100 : 0
     end
 
     def games_since_last_play
-        time = self.games.where(:finished => true).order('updated_at DESC').select('updated_at').first
-        Game.where("created_at > ?", time).count
+        if games_played > 0
+            time = self.games.where(:finished => true).order('updated_at DESC').select('updated_at').first
+            byebug
+            Game.where(:finished => true).where("created_at > ?", time).count
+        else
+            'Player has not yet played a game.'
+        end
     end
 end
