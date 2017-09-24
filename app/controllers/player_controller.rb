@@ -15,7 +15,7 @@ class PlayerController < ApplicationController
     json_response(@player, :updated)
   end
 
-  def delete
+  def destroy
     @player.destroy!
     json_response(head, :no_content)
   end

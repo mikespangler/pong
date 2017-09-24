@@ -12,13 +12,24 @@ class Game < ApplicationRecord
         }
     end
 
-    def finished?
-        scores_by_key.values.any? { |score| score >= 21 }
+    def rewind!
+        self.scores.order('created_at DESC').first.destroy!
     end
 
-    # player 1 always begins service 
-    def service
-        
+    def update_service!
+        score_count = self.scores.count
+        if score_count > 0 && score_count % 3 == 0
+            current_service = self.service == 1 ? 2 : 1
+            self.update(service: current_service)
+        end
+    end
+
+    def serving
+        self.names_index[self.service]
+    end
+
+    def finished
+        scores_by_key.values.any? { |score| score >= 21 }
     end
 
     def scores_by_key

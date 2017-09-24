@@ -17,7 +17,7 @@ class GameController < ApplicationController
 
   def update
     @game.update(game_params)
-    json_response(@game :updated)
+    json_response(@game, :updated)
   end
 
   def destroy
@@ -29,7 +29,7 @@ class GameController < ApplicationController
 
   def game_params
     # whitelist params
-    params.permit(:player_1_id, :player_2_id, :finished)
+    params.permit(:player_1_id, :player_2_id, :finished, :service)
   end
   def set_game
     @game = Game.find(params[:id])
