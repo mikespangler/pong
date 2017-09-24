@@ -3,7 +3,7 @@ class ScoreController < ApplicationController
 
   def create
     @score = Score.create!(score_params)
-    @game.update_service!
+    @game.update_stats!
     json_response(@score, :created)
   end  
 
