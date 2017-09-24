@@ -5,16 +5,12 @@ class Game < ApplicationRecord
     has_many :scores
     has_many :players
 
-    def names_index
-        {
-            self.player_1_id => self.player_1.name,
-            self.player_2_id => self.player_2.name
-        }
-    end
-
-    def serving
-        self.names_index[self.service]
-    end
+    # def names_index
+    #     {
+    #         self.player_1_id => self.player_1.name,
+    #         self.player_2_id => self.player_2.name
+    #     }
+    # end
 
     def rewind!
         self.scores.order('created_at DESC').first.destroy!
@@ -42,9 +38,9 @@ class Game < ApplicationRecord
         end
     end
 
-    def winner_name
-        self.names_index[self.winner]
-    end
+    # def winner_name
+    #     self.names_index[self.winner]
+    # end
 
     def check_finished
         # TODO: account for games that go over 21
