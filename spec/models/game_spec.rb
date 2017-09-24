@@ -25,4 +25,7 @@ RSpec.describe Game, type: :model do
             expect { game.rewind! }.to change(game.scores, :count).by(-1)
         end
     end
+
+    describe "#update_stats!" do 
+    end
 end
