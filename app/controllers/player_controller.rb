@@ -7,7 +7,7 @@ class PlayerController < ApplicationController
   end
 
   def show
-    json_response(@player)
+    json_response(PlayerSerializer.new(@player))
   end
 
   def update

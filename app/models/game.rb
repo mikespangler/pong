@@ -12,35 +12,46 @@ class Game < ApplicationRecord
         }
     end
 
-    def rewind!
-        self.scores.order('created_at DESC').first.destroy!
-    end
-
-    def update_service!
-        score_count = self.scores.count
-        if score_count > 0 && score_count % 3 == 0
-            current_service = self.service == 1 ? 2 : 1
-            self.update(service: current_service)
-        end
-    end
-
     def serving
         self.names_index[self.service]
     end
 
-    def finished
-        scores_by_key.values.any? { |score| score >= 21 }
+    def rewind!
+        self.scores.order('created_at DESC').first.destroy!
+        self.update_stats!
     end
 
-    def scores_by_key
-        self.scores.group(:player_id).count
+    def update_stats!
+        self.update!(finished: check_finished, winner: check_winner, service: check_service)
+    end
+
+    def check_service
+        score_count = self.scores.count
+        if score_count > 0 && score_count % 3 == 0
+            self.service == 1 ? 2 : 1
+        else
+            self.service
+        end
+    end
+
+    def check_winner
+        if check_finished
+            self.scores.group(:player_id).index(self.scores.group(:player_id).values.max)
+        else
+            nil
+        end
+    end
+
+    def winner_name
+        self.names_index[self.winner]
+    end
+
+    def check_finished
+        # TODO: account for games that go over 21
+        scoreboard.values.any? { |score| score >= 21 }
     end
 
     def scoreboard
-        scores_by_name = {}
-        scores_by_key.each do |id, score|
-            scores_by_name[self.names_index[id]] = score
-        end
-        scores_by_name
+        self.scores.joins(:player).group(:name).count
     end
 end
