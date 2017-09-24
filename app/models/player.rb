@@ -16,9 +16,7 @@ class Player < ApplicationRecord
 
     def games_since_last_play
         if games_played > 0
-            time = self.games.where(:finished => true).order('updated_at DESC').select('updated_at').first
-            byebug
-            Game.where(:finished => true).where("created_at > ?", time).count
+            Game.where(finished: true).where('created_at > ?', self.games.last.updated_at).count
         else
             'Player has not yet played a game.'
         end

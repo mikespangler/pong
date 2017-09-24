@@ -14,7 +14,7 @@ RSpec.describe Player, :type => :model do
             5.times { FactoryGirl.create :game, player_1: rick, player_2: morty, winner: rick.id }
         end
         it 'returns the correct win percentage' do
-            expect(player_1.win_percentage).to eq(50)
+            expect(rick.win_percentage).to eq(50)
         end
     end
 
@@ -22,10 +22,12 @@ RSpec.describe Player, :type => :model do
         before do
             Game.destroy_all
             FactoryGirl.create :game, player_1: rick, player_2: morty, finished: true, updated_at: DateTime.now
-            3.times { FactoryGirl.create :game, player_1: rick, player_2: steve, finished: true, created_at: DateTime.now + 1 }
+            3.times { FactoryGirl.create :game, player_1: rick, player_2: steve, finished: true, created_at: DateTime.now }
         end
         it 'returns the number of games played since the given players last game' do
             expect(morty.games_since_last_play).to eq(3)
+            FactoryGirl.create :game, player_1: rick, player_2: morty, finished: true, updated_at: DateTime.now
+            expect(morty.games_since_last_play).to eq(0)
         end
     end
 end
