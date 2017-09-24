@@ -1,5 +1,5 @@
 class GameController < ApplicationController
-  before_action :set_game, only: [:show, :update, :destroy]
+  before_action :set_game, only: [:show, :update, :rewind, :destroy]
 
   def index
     @games = Game.all
@@ -17,7 +17,7 @@ class GameController < ApplicationController
 
   def update
     @game.update(game_params)
-    json_response(@game :updated)
+    json_response(@game, :updated)
   end
 
   def destroy
@@ -25,11 +25,16 @@ class GameController < ApplicationController
     json_response(head, :no_content)
   end
 
+  def rewind
+    @game.rewind!
+    json_response(@game, :updated)
+  end
+
   private
 
   def game_params
     # whitelist params
-    params.permit(:player_1_id, :player_2_id, :finished)
+    params.permit(:player_1_id, :player_2_id, :finished, :service)
   end
   def set_game
     @game = Game.find(params[:id])

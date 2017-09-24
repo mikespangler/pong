@@ -1,5 +1,5 @@
 class PlayerController < ApplicationController
-  before_action :set_player, only: [:show, :update, :destroy]
+  before_action :set_player, only: [:show, :update, :delete]
 
   def create
     @player = Player.create!(player_params)
