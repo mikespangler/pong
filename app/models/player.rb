@@ -20,6 +20,6 @@ class Player < ApplicationRecord
 
     def games_since_last_play
         time = self.games.where(:finished => true).order('updated_at DESC').select('updated_at').first
-        Game.where("created_at > #{time}").count
+        Game.where("created_at > ?", time).count
     end
 end
