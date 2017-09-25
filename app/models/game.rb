@@ -10,6 +10,7 @@ class Game < ApplicationRecord
         self.update_stats!
     end
 
+    # update from ScoreController
     def update_stats!
         self.update!(finished: check_finished, winner: check_winner, service: check_service)
     end
@@ -19,7 +20,7 @@ class Game < ApplicationRecord
     end
 
     def check_service
-        # Service switches every second serve
+        # Service switches every third serve
         if score_count > 0 && score_count % 3 == 0
             self.service == 1 ? 2 : 1
         else
@@ -28,11 +29,7 @@ class Game < ApplicationRecord
     end
 
     def check_winner
-        if check_finished
-            self.scores.group(:player_id).index(self.scores.group(:player_id).values.max)
-        else
-            nil
-        end
+        check_finished ? self.scores.last.player.id : nil
     end
 
     def check_finished
@@ -41,14 +38,7 @@ class Game < ApplicationRecord
     end
 
     def scoreboard
-        # This has the possibility to be incorrect bc there is no uniqueness constraint on name. Fix is to write raw SQL query that selects name while grouping on ID.
+        # This will be inaccurate if the players share a name. Fix is to write raw SQL query that selects name while grouping on ID.
         self.scores.joins(:player).group(:name).count
-    end
-
-    def names_index
-        {
-            self.player_1_id => self.player_1.name,
-            self.player_2_id => self.player_2.name
-        }
     end
 end
