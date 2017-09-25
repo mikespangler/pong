@@ -5,8 +5,7 @@ class GameSerializer < ActiveModel::Serializer
         object.winner.nil? ? "Game not finished." : object.winner
     end
 
-    # def service
-    #     self.names_index[self.service]
-    # end
-
+    def service
+      object.names_index[object.service]  
+    end
 end

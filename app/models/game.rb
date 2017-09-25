@@ -5,13 +5,6 @@ class Game < ApplicationRecord
     has_many :scores
     has_many :players
 
-    # def names_index
-    #     {
-    #         self.player_1_id => self.player_1.name,
-    #         self.player_2_id => self.player_2.name
-    #     }
-    # end
-
     def rewind!
         self.scores.order('created_at DESC').first.destroy!
         self.update_stats!
@@ -21,8 +14,12 @@ class Game < ApplicationRecord
         self.update!(finished: check_finished, winner: check_winner, service: check_service)
     end
 
+    def score_count
+        self.scores.count
+    end
+
     def check_service
-        score_count = self.scores.count
+        # Service switches every second serve
         if score_count > 0 && score_count % 3 == 0
             self.service == 1 ? 2 : 1
         else
@@ -38,16 +35,20 @@ class Game < ApplicationRecord
         end
     end
 
-    # def winner_name
-    #     self.names_index[self.winner]
-    # end
-
     def check_finished
-        # TODO: account for games that go over 21
+        # TODO: account for games that tie, and go beyond 21
         scoreboard.values.any? { |score| score >= 21 }
     end
 
     def scoreboard
+        # This has the possibility to be incorrect bc there is no uniqueness constraint on name. Fix is to write raw SQL query that selects name while grouping on ID.
         self.scores.joins(:player).group(:name).count
+    end
+
+    def names_index
+        {
+            self.player_1_id => self.player_1.name,
+            self.player_2_id => self.player_2.name
+        }
     end
 end
