@@ -26,6 +26,15 @@ class Player < ApplicationRecord
         end
     end
 
+    # I would much rather have this in a serializer, but it's very tough to find documentation on ActiveModel::Serializers
+    def history(opposing_player)
+        {
+            "win_percentage": self.win_percentage_vs(opposing_player),
+            "avg_total_points": self.avg_total_points_vs(opposing_player),
+            "total_games": self.total_games_vs(opposing_player)
+        }
+    end
+
     def win_percentage_vs(opposing_player)
         if games_vs_player(opposing_player).count > 0
             games_won_vs_player = self.games_vs_player(opposing_player).where(finished: true, winner: self.id).count
