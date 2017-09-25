@@ -1,5 +1,5 @@
 class PlayerController < ApplicationController
-  before_action :set_player, only: [:show, :update, :destroy]
+  before_action :set_player, only: [:show, :update, :destroy, :history]
 
   def create
     @player = Player.create!(player_params)
@@ -25,11 +25,16 @@ class PlayerController < ApplicationController
     json_response(@players)
   end
 
+  def history
+    @opposing_player = Player.find(params[:opposing_player_id])
+    json_response(@player.history(@opposing_player))
+  end
+
   private
 
   def player_params
     # whitelist params
-    params.permit(:name)
+    params.permit(:name, :opposing_player_id)
   end
   def set_player
     @player = Player.find(params[:id])
