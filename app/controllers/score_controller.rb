@@ -10,7 +10,6 @@ class ScoreController < ApplicationController
 
   def destroy
     @game.rewind!
-    @game.reload
     json_response({"msg": "Last score for game #{@game.id} removed."}, :ok)
   end
 

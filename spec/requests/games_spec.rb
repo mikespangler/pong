@@ -15,8 +15,6 @@ RSpec.describe "Games", type: :request do
         end
     end
 
-    # This wasn't playing nice with the serializer. Output looks good though.
-
     describe 'game#show' do
         let(:game) { FactoryGirl.create :game }
         it "returns data for a given game" do
