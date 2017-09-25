@@ -19,7 +19,7 @@ RSpec.describe "Games", type: :request do
         let(:game) { FactoryGirl.create :game }
         it "returns data for a given game" do
             get "/game/#{game.id}"
-            expect(JSON.parse(response.body).keys).to include('scoreboard', 'finished', 'winner')
+            expect(JSON.parse(response.body).keys).to include('scoreboard', 'finished', 'game_winner')
         end
     end
 end

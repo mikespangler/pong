@@ -4,12 +4,13 @@ class ScoreController < ApplicationController
   def create
     @score = Score.create!(score_params)
     @game.update_stats!
-    json_response(@score, :created)
+    @game.reload
+    json_response(@game, :ok)
   end  
 
   def destroy
     @game.rewind!
-    json_response(head, :no_content)
+    json_response({"msg": "Last score for game #{@game.id} removed."}, :ok)
   end
 
   private

@@ -22,7 +22,7 @@ class GameController < ApplicationController
 
   def destroy
     @game.delete
-    json_response(head, :no_content)
+    json_response({"msg": "#{@game.id} deleted."}, :ok)
   end
 
   private

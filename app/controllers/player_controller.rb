@@ -17,7 +17,7 @@ class PlayerController < ApplicationController
 
   def destroy
     @player.destroy!
-    json_response(head, :no_content)
+    json_response({"msg": "player #{@player.id} deleted."}, :ok)
   end
 
   def index
